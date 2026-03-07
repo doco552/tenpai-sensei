@@ -21,6 +21,7 @@ body {
   background: radial-gradient(circle at top, #1a4a3a, var(--bg)); 
   color: #fff; 
   min-height: 100vh;
+  -webkit-text-size-adjust: 100%;
 }
 
 .container { 
@@ -28,7 +29,7 @@ body {
   flex-direction: column; 
   margin: 0 auto;
   width: 100%;
-  max-width: 800px;
+  max-width: 600px; /* スマホで見やすい幅に制限 */
   padding: env(safe-area-inset-top) 10px env(safe-area-inset-bottom); 
   box-sizing: border-box; 
 }
@@ -37,26 +38,21 @@ body {
   background: rgba(255,255,255,0.08); 
   backdrop-filter: blur(10px); 
   border-radius: 15px; 
-  padding: 15px; 
-  margin-bottom: 12px; 
+  padding: 12px; 
+  margin-bottom: 10px; 
   border: 1px solid rgba(255,255,255,0.1); 
 }
 
-/* ラベルの文字を白く、太く表示 */
-.config-label {
-  font-size: 14px;
-  font-weight: bold;
-  color: #fff;
-  margin: 0 5px;
-}
+.config-label { font-size: 14px; font-weight: bold; color: #fff; margin: 0 5px; }
 
+/* 牌のサイズをスマホに最適化 */
 .tile-button { 
-  margin: 4px; 
-  width: 56px; 
-  height: 78px; 
-  font-size: 38px; 
-  line-height: 78px; 
-  border-radius: 8px; 
+  margin: 3px; 
+  width: 50px; 
+  height: 70px; 
+  font-size: 34px; 
+  line-height: 70px; 
+  border-radius: 6px; 
   border: none; 
   background: #fdfdfd; 
   box-shadow: 0 4px 0 #dcdcdc; 
@@ -69,80 +65,51 @@ body {
 
 .m { color: #d32f2f; } .p { color: #1976d2; } .s { color: #2e7d32; } .honor { color: #333333; }
 
-#tiles-container { 
-  flex: 1; 
-  padding-bottom: 30px;
-}
+/* 待ち牌が光る設定 */
+.wait-highlight { outline: 4px solid #00ffcc; box-shadow: 0 0 15px #00ffcc !important; }
 
-#tiles { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+#tiles-container { flex: 1; padding-bottom: 80px; }
+#tiles { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
 
 .tile-label { 
-  width: 100%; 
-  text-align: left; 
-  font-size: 14px; 
-  color: #a0d8c0; 
-  border-left: 4px solid var(--accent); 
-  padding-left: 10px; 
-  margin: 20px 0 8px; 
+  width: 100%; text-align: left; font-size: 13px; color: #a0d8c0; 
+  border-left: 4px solid var(--accent); padding-left: 8px; margin: 15px 0 5px; 
 }
 
-#hand { min-height: 90px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin-bottom: 10px; }
+#hand { min-height: 80px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin-bottom: 5px; }
 
-.result { font-size: 18px; min-height: 60px; text-align: center; font-weight: bold; }
+.result { font-size: 16px; min-height: 50px; text-align: center; font-weight: bold; }
 
 .yakuman-text { 
-  background: var(--yakuman); 
-  background-size: 200% auto;
-  -webkit-background-clip: text; 
-  -webkit-text-fill-color: transparent; 
-  font-size: 24px; 
-  font-weight: 900;
-  animation: flow 2s linear infinite; 
+  background: var(--yakuman); background-size: 200% auto; -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent; animation: flow 2s linear infinite; 
 }
+@keyframes flow { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
 
-@keyframes flow { 
-  0% { background-position: 0% 50%; } 
-  100% { background-position: 200% 50%; } 
-}
-
-/* ボタンのデザインを統一 */
+/* フッターボタンの固定 */
 .footer-btns {
-  position: sticky;
-  bottom: 10px;
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  padding: 10px 0;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  display: flex; justify-content: center; gap: 10px;
+  padding: 10px; background: rgba(7, 26, 20, 0.9);
 }
 
 .action-btn { 
-  padding: 12px 30px; 
-  font-size: 16px; 
-  border-radius: 30px; 
-  border: none; 
-  font-weight: bold; 
-  cursor: pointer;
-  transition: 0.2s;
+  padding: 10px 25px; font-size: 15px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer;
 }
-
 .btn-secondary { background: rgba(255,255,255,0.2); color: #fff; }
 .btn-primary { background: var(--accent); color: #1a4a3a; }
 
-select { padding: 6px; border-radius: 5px; font-size: 14px; cursor: pointer; }
-
-@media (max-width: 768px) {
-  body { overflow: hidden; height: 100vh; position: fixed; touch-action: none; }
-  .container { height: 100%; }
-  #tiles-container { overflow-y: auto; touch-action: pan-y; }
+@media (max-width: 480px) {
+  .tile-button { width: 44px; height: 60px; font-size: 30px; line-height: 60px; }
 }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <h1 style="font-size: 22px; margin: 15px 5px; text-align: center;">🀄 テンパイ先生 Pro Max</h1>
+  <h1 style="font-size: 20px; margin: 10px; text-align: center;">🀄 テンパイ先生 Pro Max</h1>
 
-  <div class="section" style="display:flex; justify-content:space-around; align-items: center; flex-wrap: wrap; gap: 10px;">
+  <div class="section" style="display:flex; justify-content:space-around; align-items: center; flex-wrap: wrap; gap: 5px;">
     <div>
       <input type="radio" name="isParent" id="child" value="child" checked onchange="v();check();"> 
       <label for="child" class="config-label">子</label>
@@ -183,13 +150,21 @@ const to = {'m':10,'p':20,'s':30,'東':41,'南':42,'西':43,'北':44,'白':45,'�
 const ats = Object.keys(td);
 
 function v() { if(navigator.vibrate) navigator.vibrate(15); }
-function clearAll() { hand=[]; render(); document.getElementById("result").innerHTML=""; }
+
+function clearAll() { 
+  hand=[]; render(); 
+  document.getElementById("result").innerHTML=""; 
+  ats.forEach(t => { if(document.getElementById("tile-"+t)) document.getElementById("tile-"+t).classList.remove("wait-highlight"); });
+}
+
 function render() {
   let h = ""; 
   hand.forEach((t,i)=> h+=`<button class="tile-button ${t.includes('m')?'m':t.includes('p')?'p':t.includes('s')?'s':'honor'}" onclick="removeTile(${i})">${td[t]}</button>`);
   document.getElementById("hand").innerHTML = h;
 }
+
 function removeTile(i) { v(); hand.splice(i,1); render(); }
+
 function addTile(t) { 
   if(hand.length < 14 && hand.filter(x=>x===t).length < 4) { 
     hand.push(t); 
@@ -197,16 +172,11 @@ function addTile(t) {
     render(); 
   } 
 }
+
 function check() {
   let res = document.getElementById("result");
   if(hand.length !== 13) { res.innerText="13枚選んでください"; return; }
-  
-  // 1. 判定の開始時にすべてのハイライトを一旦消去する
-  ats.forEach(t => {
-    const btn = document.getElementById("tile-" + t);
-    if(btn) btn.classList.remove("wait-highlight");
-  });
-  
+  ats.forEach(t => { const b = document.getElementById("tile-"+t); if(b) b.classList.remove("wait-highlight"); });
   let ws = [];
   ats.forEach(t => {
     if(hand.filter(x=>x===t).length >= 4) return;
@@ -214,30 +184,27 @@ function check() {
     let pt = getPatterns(test);
     if(pt.length > 0) ws.push({tile: t, ...calcBest(pt, t, test)});
   });
-
   if(ws.length === 0) res.innerHTML="役なし / 不聴";
   else {
     let h = "";
     ws.forEach(w => {
-      // 2. 待ち牌に対応するボタンに wait-highlight クラスを追加する
-      const targetBtn = document.getElementById("tile-" + w.tile);
-      if(targetBtn) targetBtn.classList.add("wait-highlight");
-
+      const b = document.getElementById("tile-"+w.tile); if(b) b.classList.add("wait-highlight");
       let label = w.isY ? `<span class="yakuman-text">${w.y.join('・')}</span>` : `${w.y.join('・')} (${w.fu}符${w.han}翻)`;
       h += `${td[w.tile]}: ${label} ${w.s}点<br>`;
     });
     res.innerHTML = h;
   }
 }
+
 function getPatterns(tiles) {
   let c = {}; tiles.forEach(t=>c[t]=(c[t]||0)+1);
   let p = [];
   if(["1m","9m","1p","9p","1s","9s","東","南","西","北","白","發","中"].every(t=>c[t]>=1)) p.push({type:'kokushi'});
-  for(let t in c) if(c[t]>=2) { let next = {...c}; next[t]-=2; decompose(next).forEach(m => p.push({j:t, m:m, type:'n'})); }
-  let pairs = 0; for(let t in c) if(c[t]===2) pairs++; 
-  if(pairs === 7) p.push({type:'7'});
+  for(let t in c) if(c[t]>=2) { let n = {...c}; n[t]-=2; decompose(n).forEach(m => p.push({j:t, m:m, type:'n'})); }
+  let pairs = 0; for(let t in c) if(c[t]===2) pairs++; if(pairs===7) p.push({type:'7'});
   return p;
 }
+
 function decompose(c) {
   let rs = [];
   function w(rem, cur) {
@@ -252,10 +219,11 @@ function decompose(c) {
   }
   w(c, []); return rs;
 }
+
 function calcBest(patterns, winT, allT) {
   let isp = document.querySelector('input[name="isParent"]:checked').value === "parent";
   let dr = parseInt(document.getElementById("doraCount").value);
-  let ri = document.getElementById("r") ? (document.getElementById("r").checked ? 1 : 0) : (document.getElementById("isRiichi").checked ? 1 : 0);
+  let ri = document.getElementById("isRiichi").checked ? 1 : 0;
   let best = {s:0, han:0, fu:0, y:[], isY: false};
   patterns.forEach(p => {
     let y = [], h = ri + dr, f = 30, isY = false;
@@ -290,7 +258,7 @@ function calcBest(patterns, winT, allT) {
     let l = document.createElement("div"); l.className="tile-label"; l.innerText=g[0]; document.getElementById("tiles").appendChild(l);
     g[1].forEach(t => {
       let b = document.createElement("button"); b.className="tile-button "+(t.includes('m')?'m':t.includes('p')?'p':t.includes('s')?'s':'honor');
-      b.innerText=td[t]; b.onclick=()=>{v();addTile(t);}; document.getElementById("tiles").appendChild(b);
+      b.id="tile-"+t; b.innerText=td[t]; b.onclick=()=>{v();addTile(t);}; document.getElementById("tiles").appendChild(b);
     });
   });
 })();
