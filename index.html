@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>テンパイ先生 Pro Max</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&display=swap" rel="stylesheet">
+
+<style>
+:root { 
+  --bg: #071a14; 
+  --accent: #5effc9; 
+  --yakuman: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff); 
+}
+
+body { 
+  margin: 0; 
+  font-family: 'Noto Sans JP', sans-serif; 
+  background: radial-gradient(circle at top, #1a4a3a, var(--bg)); 
+  color: #fff; 
+  min-height: 100vh;
+}
+
+.container { 
+  display: flex; 
+  flex-direction: column; 
+  margin: 0 auto;
+  width: 100%;
+  max-width: 800px;
+  padding: env(safe-area-inset-top) 10px env(safe-area-inset-bottom); 
+  box-sizing: border-box; 
+}
+
+.section { 
+  background: rgba(255,255,255,0.08); 
+  backdrop-filter: blur(10px); 
+  border-radius: 15px; 
+  padding: 15px; 
+  margin-bottom: 12px; 
+  border: 1px solid rgba(255,255,255,0.1); 
+}
+
+/* ラベルの文字を白く、太く表示 */
+.config-label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  margin: 0 5px;
+}
+
+.tile-button { 
+  margin: 4px; 
+  width: 56px; 
+  height: 78px; 
+  font-size: 38px; 
+  line-height: 78px; 
+  border-radius: 8px; 
+  border: none; 
+  background: #fdfdfd; 
+  box-shadow: 0 4px 0 #dcdcdc; 
+  cursor: pointer; 
+  display: inline-block; 
+  -webkit-tap-highlight-color: transparent; 
+}
+
+.tile-button:active { transform: translateY(2px); box-shadow: 0 2px 0 #dcdcdc; }
+
+.m { color: #d32f2f; } .p { color: #1976d2; } .s { color: #2e7d32; } .honor { color: #333333; }
+
+#tiles-container { 
+  flex: 1; 
+  padding-bottom: 30px;
+}
+
+#tiles { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+
+.tile-label { 
+  width: 100%; 
+  text-align: left; 
+  font-size: 14px; 
+  color: #a0d8c0; 
+  border-left: 4px solid var(--accent); 
+  padding-left: 10px; 
+  margin: 20px 0 8px; 
+}
+
+#hand { min-height: 90px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin-bottom: 10px; }
+
+.result { font-size: 18px; min-height: 60px; text-align: center; font-weight: bold; }
+
+.yakuman-text { 
+  background: var(--yakuman); 
+  background-size: 200% auto;
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent; 
+  font-size: 24px; 
+  font-weight: 900;
+  animation: flow 2s linear infinite; 
+}
+
+@keyframes flow { 
+  0% { background-position: 0% 50%; } 
+  100% { background-position: 200% 50%; } 
+}
+
+/* ボタンのデザインを統一 */
+.footer-btns {
+  position: sticky;
+  bottom: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 10px 0;
+}
+
+.action-btn { 
+  padding: 12px 30px; 
+  font-size: 16px; 
+  border-radius: 30px; 
+  border: none; 
+  font-weight: bold; 
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-secondary { background: rgba(255,255,255,0.2); color: #fff; }
+.btn-primary { background: var(--accent); color: #1a4a3a; }
+
+select { padding: 6px; border-radius: 5px; font-size: 14px; cursor: pointer; }
+
+@media (max-width: 768px) {
+  body { overflow: hidden; height: 100vh; position: fixed; touch-action: none; }
+  .container { height: 100%; }
+  #tiles-container { overflow-y: auto; touch-action: pan-y; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1 style="font-size: 22px; margin: 15px 5px; text-align: center;">🀄 テンパイ先生 Pro Max</h1>
+
+  <div class="section" style="display:flex; justify-content:space-around; align-items: center; flex-wrap: wrap; gap: 10px;">
+    <div>
+      <input type="radio" name="isParent" id="child" value="child" checked onchange="v();check();"> 
+      <label for="child" class="config-label">子</label>
+      <input type="radio" name="isParent" id="parent" value="parent" onchange="v();check();"> 
+      <label for="parent" class="config-label">親</label>
+    </div>
+    <div>
+      <span class="config-label">ドラ:</span>
+      <select id="doraCount" onchange="v();check();">
+        <script>for(let i=0;i<13;i++)document.write(`<option value="${i}">${i}</option>`);</script>
+      </select>
+    </div>
+    <div>
+      <input type="checkbox" id="isRiichi" onchange="v();check();"> 
+      <label for="isRiichi" class="config-label">立直</label>
+    </div>
+  </div>
+
+  <div class="section">
+    <div id="hand"></div>
+    <div id="result" class="result"></div>
+  </div>
+
+  <div id="tiles-container">
+    <div id="tiles"></div>
+  </div>
+
+  <div class="footer-btns">
+    <button class="action-btn btn-secondary" onclick="v();clearAll();">全消去</button>
+    <button class="action-btn btn-primary" onclick="v();check();">判定実行</button>
+  </div>
+</div>
+
+<script>
+let hand = [];
+const td = {"1m":"🀇","2m":"🀈","3m":"🀉","4m":"🀊","5m":"🀋","6m":"🀌","7m":"🀍","8m":"🀎","9m":"🀏","1s":"🀐","2s":"🀑","3s":"🀒","4s":"🀓","5s":"🀔","6s":"🀕","7s":"🀖","8s":"🀗","9s":"🀘","1p":"🀙","2p":"🀚","3p":"🀛","4p":"🀜","5p":"🀝","6p":"🀞","7p":"🀟","8p":"🀠","9p":"🀡","東":"🀀","南":"🀁","西":"🀂","北":"🀃","白":"🀆","發":"🀅","中":"🀄"};
+const to = {'m':10,'p':20,'s':30,'東':41,'南':42,'西':43,'北':44,'白':45,'發':46,'中':47};
+const ats = Object.keys(td);
+
+function v() { if(navigator.vibrate) navigator.vibrate(15); }
+function clearAll() { hand=[]; render(); document.getElementById("result").innerHTML=""; }
+function render() {
+  let h = ""; 
+  hand.forEach((t,i)=> h+=`<button class="tile-button ${t.includes('m')?'m':t.includes('p')?'p':t.includes('s')?'s':'honor'}" onclick="removeTile(${i})">${td[t]}</button>`);
+  document.getElementById("hand").innerHTML = h;
+}
+function removeTile(i) { v(); hand.splice(i,1); render(); }
+function addTile(t) { 
+  if(hand.length < 14 && hand.filter(x=>x===t).length < 4) { 
+    hand.push(t); 
+    hand.sort((a,b)=> (to[a.slice(-1)]||to[a])+parseInt(a) - ((to[b.slice(-1)]||to[b])+parseInt(b))); 
+    render(); 
+  } 
+}
+function check() {
+  let res = document.getElementById("result");
+  if(hand.length !== 13) { res.innerText="13枚選んでください"; return; }
+  
+  // 1. 判定の開始時にすべてのハイライトを一旦消去する
+  ats.forEach(t => {
+    const btn = document.getElementById("tile-" + t);
+    if(btn) btn.classList.remove("wait-highlight");
+  });
+  
+  let ws = [];
+  ats.forEach(t => {
+    if(hand.filter(x=>x===t).length >= 4) return;
+    let test = [...hand, t];
+    let pt = getPatterns(test);
+    if(pt.length > 0) ws.push({tile: t, ...calcBest(pt, t, test)});
+  });
+
+  if(ws.length === 0) res.innerHTML="役なし / 不聴";
+  else {
+    let h = "";
+    ws.forEach(w => {
+      // 2. 待ち牌に対応するボタンに wait-highlight クラスを追加する
+      const targetBtn = document.getElementById("tile-" + w.tile);
+      if(targetBtn) targetBtn.classList.add("wait-highlight");
+
+      let label = w.isY ? `<span class="yakuman-text">${w.y.join('・')}</span>` : `${w.y.join('・')} (${w.fu}符${w.han}翻)`;
+      h += `${td[w.tile]}: ${label} ${w.s}点<br>`;
+    });
+    res.innerHTML = h;
+  }
+}
+function getPatterns(tiles) {
+  let c = {}; tiles.forEach(t=>c[t]=(c[t]||0)+1);
+  let p = [];
+  if(["1m","9m","1p","9p","1s","9s","東","南","西","北","白","發","中"].every(t=>c[t]>=1)) p.push({type:'kokushi'});
+  for(let t in c) if(c[t]>=2) { let next = {...c}; next[t]-=2; decompose(next).forEach(m => p.push({j:t, m:m, type:'n'})); }
+  let pairs = 0; for(let t in c) if(c[t]===2) pairs++; 
+  if(pairs === 7) p.push({type:'7'});
+  return p;
+}
+function decompose(c) {
+  let rs = [];
+  function w(rem, cur) {
+    let ks = Object.keys(rem).filter(k=>rem[k]>0).sort();
+    if(ks.length===0) { rs.push(cur); return; }
+    let t = ks[0];
+    if(rem[t]>=3) { let n={...rem}; n[t]-=3; w(n, [...cur, {type:'k', t:t}]); }
+    let num=parseInt(t); let s=t.slice(-1);
+    if(!isNaN(num)&&num<=7 && rem[(num+1)+s]>0 && rem[(num+2)+s]>0) {
+      let n={...rem}; n[t]--; n[(num+1)+s]--; n[(num+2)+s]--; w(n, [...cur, {type:'s', ts:[t,(num+1)+s,(num+2)+s]}]);
+    }
+  }
+  w(c, []); return rs;
+}
+function calcBest(patterns, winT, allT) {
+  let isp = document.querySelector('input[name="isParent"]:checked').value === "parent";
+  let dr = parseInt(document.getElementById("doraCount").value);
+  let ri = document.getElementById("r") ? (document.getElementById("r").checked ? 1 : 0) : (document.getElementById("isRiichi").checked ? 1 : 0);
+  let best = {s:0, han:0, fu:0, y:[], isY: false};
+  patterns.forEach(p => {
+    let y = [], h = ri + dr, f = 30, isY = false;
+    if(p.type==='kokushi') { y=["国士無双"]; isY=true; }
+    else if(p.type==='7') { y=["七対子"]; h+=2; f=25; }
+    else {
+      if(p.m.filter(m=>m.type==='k').length === 4) { y=["四暗刻"]; isY=true; }
+      else {
+        if(p.m.filter(m=>m.type==='k').length >= 3) { y.push("対々和"); h+=2; }
+        if(allT.every(t=>{let n=parseInt(t); return !isNaN(n)&&n>1&&n<9;})) { y.push("断么九"); h+=1; }
+        let ss = new Set(allT.filter(t=>!isNaN(parseInt(t))).map(t=>t.slice(-1)));
+        if(ss.size===1) { if(allT.some(t=>isNaN(parseInt(t)))) { y.push("混一色"); h+=3; } else { y.push("清一色"); h+=6; } }
+        p.m.forEach(m=>{if(m.type==='k') f+=(parseInt(m.t)%9===1||isNaN(parseInt(m.t)))?8:4;});
+        if(["白","發","中"].includes(p.j)) { f+=2; y.push("役牌"); h+=1; }
+      }
+    }
+    if(ri && !isY) y.push("立直"); if(dr && !isY) y.push(`ドラ${dr}`);
+    let curH = isY ? 13 : h;
+    let ff = Math.ceil(f/10)*10;
+    let score = 0;
+    if(curH >= 13) score = isp?48000:32000;
+    else if(curH >= 5) score = curH>=11?(isp?36000:24000):curH>=8?(isp?24000:16000):curH>=6?(isp?18000:12000):(isp?12000:8000);
+    else { let a = ff * Math.pow(2, curH+2); score = Math.ceil((isp?a*6:a*4)/100)*100; }
+    if(score > best.s) best = {s:score, han:curH, fu:ff, y:y, isY:isY};
+  });
+  return best;
+}
+
+(function(){
+  const ts = [["萬子", ["1m","2m","3m","4m","5m","6m","7m","8m","9m"]],["筒子", ["1p","2p","3p","4p","5p","6p","7p","8p","9p"]],["索子", ["1s","2s","3s","4s","5s","6s","7s","8s","9s"]],["字牌", ["東","南","西","北","白","發","中"]]];
+  ts.forEach(g => {
+    let l = document.createElement("div"); l.className="tile-label"; l.innerText=g[0]; document.getElementById("tiles").appendChild(l);
+    g[1].forEach(t => {
+      let b = document.createElement("button"); b.className="tile-button "+(t.includes('m')?'m':t.includes('p')?'p':t.includes('s')?'s':'honor');
+      b.innerText=td[t]; b.onclick=()=>{v();addTile(t);}; document.getElementById("tiles").appendChild(b);
+    });
+  });
+})();
+</script>
+</body>
+</html>
