@@ -2,8 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>テンパイ先生 Pro Max</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&display=swap" rel="stylesheet">
@@ -101,6 +100,15 @@ body {
 
 @media (max-width: 480px) {
   .tile-button { width: 44px; height: 60px; font-size: 30px; line-height: 60px; }
+}
+
+/* ドラ選択などのセレクトボックスの文字を16px以上にする */
+select, input {
+  font-size: 16px !important;
+}
+
+.tile-button {
+  touch-action: manipulation; /* ダブルタップズームを無効化 */
 }
 </style>
 </head>
